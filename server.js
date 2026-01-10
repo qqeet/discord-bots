@@ -1,23 +1,62 @@
 const http = require('http');
 const { spawn } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+// 建立 logs 資料夾
+const logsDir = path.join(__dirname, 'logs');
+if (!fs.existsSync(logsDir)) {
+  fs.mkdirSync(logsDir, { recursive: true });
+}
+
+// 日誌檔案路徑
+const logFile = path.join(logsDir, `bots-${new Date().toISOString().split('T')[0]}.log`);
+
+// 寫入日誌函數
+function writeLog(message) {
+  const timestamp = new Date().toISOString();
+  const logMessage = `[${timestamp}] ${message}\n`;
+  console.log(logMessage.trim());
+  fs.appendFileSync(logFile, logMessage);
+}
+
+writeLog('========== Bot Server Started ==========');
 
 // 啟動 Discord bot
 const botProcesses = [];
 const botFiles = ['Myserver.js', 'Fanartserver.js', 'twitterpic.js'];
 
 botFiles.forEach((botFile, index) => {
-  const bot = spawn('node', [botFile], {
-    stdio: 'inherit',  // 直接輸出到 console
-    detached: false
-  });
+  writeLog(`Starting bot ${index}: ${botFile}`);
+  
+  const bot = spawn('node', [botFile]);
+
+  // 捕獲 stdout
+  if (bot.stdout) {
+    bot.stdout.on('data', (data) => {
+      const message = data.toString().trim();
+      if (message) {
+        writeLog(`[Bot ${index}] ${message}`);
+      }
+    });
+  }
+
+  // 捕獲 stderr
+  if (bot.stderr) {
+    bot.stderr.on('data', (data) => {
+      const message = data.toString().trim();
+      if (message) {
+        writeLog(`[Bot ${index} ERROR] ${message}`);
+      }
+    });
+  }
 
   bot.on('error', (err) => {
-    console.error(`[Bot ${index}] Process error:`, err);
+    writeLog(`[Bot ${index}] Process error: ${err.message}`);
   });
 
   bot.on('exit', (code) => {
-    console.log(`[Bot ${index}] Process exited with code ${code}`);
-    // 可以在這裡添加自動重啟邏輯
+    writeLog(`[Bot ${index}] Process exited with code ${code}`);
   });
 
   botProcesses.push(bot);
@@ -31,20 +70,22 @@ const server = http.createServer((req, res) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`HTTP server listening on port ${PORT}`);
+  writeLog(`HTTP server listening on port ${PORT}`);
 });
 
 // 優雅關閉
 process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
+  writeLog('SIGTERM signal received: closing HTTP server');
   server.close(() => {
-    console.log('HTTP server closed');
+    writeLog('HTTP server closed');
     // 關閉所有 bot 進程
     botProcesses.forEach((bot, index) => {
       bot.kill('SIGTERM');
-      console.log(`Bot ${index} process terminated`);
+      writeLog(`Bot ${index} process terminated`);
     });
+    writeLog('========== Bot Server Stopped ==========');
     process.exit(0);
   });
 });
+
 
