@@ -37,30 +37,27 @@ client.on('messageDelete', function (message) {
     const logChannel = client.channels.cache.get('887169974211334174');
     if (!logChannel) return;
 
-    // 如果有附件（圖片）
+    // 優先檢查是否有圖片
+    let hasImage = false;
     if (message.attachments.size > 0) {
-      let hasImage = false;
       message.attachments.forEach(attachment => {
         if (attachment.url.includes(".jpg") || attachment.url.includes(".png") || attachment.url.includes(".jpeg") || attachment.url.includes(".gif")) {
           hasImage = true;
         }
       });
-
-      if (hasImage) {
-        const embed = new EmbedBuilder()
-          .setDescription('這個人在' + `<#${message.channel.id}>` + '有訊息被刪除')
-          .setURL('https://discordapp.com/')
-          .setColor(5434855)
-          .setAuthor({ name: authorName, iconURL: authorIcon })
-          .addFields({ name: '刪除內容', value: '以下圖片' });
-        logChannel.send({ embeds: [embed] });
-        logChannel.send(`${message.attachments.first().url}`);
-        return;
-      }
     }
 
-    // 如果有文字內容
-    if (message.content && message.content !== "") {
+    // 只發送一次日誌
+    if (hasImage) {
+      const embed = new EmbedBuilder()
+        .setDescription('這個人在' + `<#${message.channel.id}>` + '有訊息被刪除')
+        .setURL('https://discordapp.com/')
+        .setColor(5434855)
+        .setAuthor({ name: authorName, iconURL: authorIcon })
+        .addFields({ name: '刪除內容', value: '以下圖片' });
+      logChannel.send({ embeds: [embed] });
+      logChannel.send(`${message.attachments.first().url}`);
+    } else if (message.content && message.content !== "") {
       const embed = new EmbedBuilder()
         .setDescription('這個人在' + `<#${message.channel.id}>` + '有訊息被刪除')
         .setURL('https://discordapp.com/')
@@ -78,10 +75,13 @@ client.on('messageDelete', function (message) {
 client.on('messageUpdate', function (oldMessage, newMessage) {
   if (!oldMessage.guild || !newMessage.guild) return;
   if(oldMessage.author.id === client.user.id) return;
-  if (oldMessage.content.includes("https://")) return;
   if (oldMessage.author.bot) {
     return; // 忽略由機器人發出的訊息
   }
+  
+  // 如果新舊內容相同，不記錄
+  if (oldMessage.content === newMessage.content) return;
+  
   try {
       const authorName = (oldMessage.member && oldMessage.member.user && oldMessage.member.user.username) ? oldMessage.member.user.username : (oldMessage.author ? oldMessage.author.username : 'Unknown');
       const authorIcon = (oldMessage.member && oldMessage.member.user && oldMessage.member.user.avatar) ? `https://cdn.discordapp.com/avatars/${oldMessage.member.user.id}/${oldMessage.member.user.avatar}.jpeg` : null;
