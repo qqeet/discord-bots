@@ -16,70 +16,70 @@ client.on('clientReady', () => {
 
   //抓刪 刪除事件
   client.on('messageDelete', function (message) {
-  try {
-    if (!message.guild) return; //只要是來自群組的訊息
-    if (!message.author) return; // 檢查 author 是否存在
-    if (message.author.bot) return; // 忽略由機器人發出的訊息
-    
-    let mStr = '';
-    if (message.attachments.size > 0) { //Make sure there are attachments at all
-        var react = false; //Do we react to the message? Default to false
+  if (!message.guild) return; //只要是來自群組的訊息
+  if (!message.author) return; // 檢查 author 是否存在
+  let mStr = '';
+  if (message.author.bot) {
+    return; // 忽略由機器人發出的訊息
+  }
+  if (message.attachments.size > 0) { //Make sure there are attachments at all
+      var react = false; //Do we react to the message? Default to false
 
-        message.attachments.forEach(attachment => { //Check each attachment to see if it's a jpg, png, or jpeg
-            if (attachment.url.includes(".jpg") || attachment.url.includes(".png") || attachment.url.includes(".jpeg") || attachment.url.includes(".gif") ) {
-                react = true; //It's an image! We want to react to the message
-            };
-        });
-
-        if (react === true) { //React to the message
-            const authorName = (message.member && message.member.user && message.member.user.username) ? message.member.user.username : message.author.username;
-            const authorIcon = (message.member && message.member.user && message.member.user.avatar) ? `https://cdn.discordapp.com/avatars/${message.member.user.id}/${message.member.user.avatar}.jpeg` : null;
-            const embed = new EmbedBuilder()
-              .setDescription('這個人在' + `<#${message.channel.id}>` + '有訊息被刪除')
-              .setURL('https://discordapp.com/')
-              .setColor(5434855)
-              .setAuthor({ name: authorName, iconURL: authorIcon })
-              .addFields({ name: '刪除內容', value: '以下圖片' });
-            try {
-              const logChannel = client.channels.cache.get('1174971959348572210');
-              if (logChannel) {
-                logChannel.send({ embeds: [embed] });
-                logChannel.send(`${message.attachments.first().url}`);
-              }
-            } catch (err) {
-              console.error('發送訊息失敗:', err);
-            }
-              
-        };
-    };
-    
-    if (message.content && message.content !== "") {
-        const embed = {
-            "description": ('這個人在'+`<#${message.channel.id}>`+'有訊息被刪除'),          //訊息刪除
-            "url": "https://discordapp.com/",
-            "color": 5434855,
-            "author": {
-              "name": `${message.member?.user?.username || message.author?.username || 'Unknown'}`,
-              "icon_url": (message.member?.user?.avatar) ? ("https://cdn.discordapp.com/avatars/"+`${message.member.user.id}`+"/"+`${message.member.user.avatar}`+".jpeg") : null
-            },
-            "fields": [
-              {
-                "name": "刪除內容",
-                "value": `${message.content}`
-              }
-            ]
+      message.attachments.forEach(attachment => { //Check each attachment to see if it's a jpg, png, or jpeg
+          if (attachment.url.includes(".jpg") || attachment.url.includes(".png") || attachment.url.includes(".jpeg") || attachment.url.includes(".gif") ) {
+              react = true; //It's an image! We want to react to the message
           };
-          if (embed.fields.length > 0) {
-            try {
-              const logChannel = client.channels.cache.get('1174971959348572210');
-              if (logChannel) {
-                logChannel.send({ embeds: [embed] });
-              }
-            } catch (err) {
-              console.error('發送訊息失敗:', err);
+      });
+
+      if (react === true) { //React to the message
+          const authorName = (message.member && message.member.user && message.member.user.username) ? message.member.user.username : message.author.username;
+          const authorIcon = (message.member && message.member.user && message.member.user.avatar) ? `https://cdn.discordapp.com/avatars/${message.member.user.id}/${message.member.user.avatar}.jpeg` : null;
+          const embed = new EmbedBuilder()
+            .setDescription('這個人在' + `<#${message.channel.id}>` + '有訊息被刪除')
+            .setURL('https://discordapp.com/')
+            .setColor(5434855)
+            .setAuthor({ name: authorName, iconURL: authorIcon })
+            .addFields({ name: '刪除內容', value: '以下圖片' });
+          try {
+            const logChannel = client.channels.cache.get('1174971959348572210');
+            if (logChannel) {
+              logChannel.send({ embeds: [embed] });
+              logChannel.send(`${message.attachments.first().url}`);
             }
+          } catch (err) {
+            console.error('發送訊息失敗:', err);
           }
-    }
+            
+      };
+  };
+  
+  try{
+      if (message.content===("")) return;
+      const embed = {
+          "description": ('這個人在'+`<#${message.channel.id}>`+'有訊息被刪除'),          //訊息刪除
+          "url": "https://discordapp.com/",
+          "color": 5434855,
+          "author": {
+            "name": `${message.member.user.username}`,
+            "icon_url": ("https://cdn.discordapp.com/avatars/"+`${message.member.user.id}`+"/"+`${message.member.user.avatar}`+".jpeg")
+          },
+          "fields": [
+            {
+              "name": "刪除內容",
+              "value": `${message.content}`
+            }
+          ]
+        };
+        if (embed.fields.length > 0) {
+          try {
+            const logChannel = client.channels.cache.get('1174971959348572210');
+            if (logChannel) {
+              logChannel.send({ embeds: [embed] });
+            }
+          } catch (err) {
+            console.error('發送訊息失敗:', err);
+          }
+        }
   }catch(err){
       console.log("messageDeleteError",err);
   }
