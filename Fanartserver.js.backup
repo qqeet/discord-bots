@@ -1,0 +1,121 @@
+const { Client } = require('discord.js');
+const ytdl = require('ytdl-core');
+const { token } = require('./fanart-token.json');
+const { prefix } = require('./config.json');
+const client = new Client();
+client.login(token);
+//node discord.js
+
+
+//node Fanartserver.js
+//node Myserver.js
+//node twitterpic.js
+
+// 連上線時的事件
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+    client.user.setActivity("Minecraft");
+});
+
+
+
+//抓刪 刪除事件
+client.on('messageDelete', function (message) {
+  if (!message.guild) return; //只要是來自群組的訊息
+  let mStr = '';
+  if (message.author.bot) {
+    return; // 忽略由機器人發出的訊息
+  }
+  if (message.attachments.size > 0) { //Make sure there are attachments at all
+      var react = false; //Do we react to the message? Default to false
+
+      message.attachments.forEach(attachment => { //Check each attachment to see if it's a jpg, png, or jpeg
+          if (attachment.url.includes(".jpg") || attachment.url.includes(".png") || attachment.url.includes(".jpeg") || attachment.url.includes(".gif") ) {
+              react = true; //It's an image! We want to react to the message
+          };
+      });
+
+      if (react === true) { //React to the message
+          const embed = {
+            "description": ('這個人在'+`<#${message.channel.id}>`+'有訊息被刪除'),     //圖片
+              "url": "https://discordapp.com/",
+              "color": 5434855,
+              "author": {
+                "name": `${message.member.user.username}`,
+                "icon_url": ("https://cdn.discordapp.com/avatars/"+`${message.member.user.id}`+"/"+`${message.member.user.avatar}`+".jpeg")
+              },
+              "fields": [
+                {
+                  "name": "刪除內容",
+                  "value": "以下圖片"
+                }
+              ]
+            };
+            client.channels.cache.get("887169974211334174").send({embed})  //榕樹
+            client.channels.cache.get("887169974211334174").send(`${message.attachments.first().url}`)  //榕樹
+            
+      };
+  };
+  
+  try{
+      if (message.content===("")) return;
+      const embed = {
+          "description": ('這個人在'+`<#${message.channel.id}>`+'有訊息被刪除'),          //訊息刪除
+          "url": "https://discordapp.com/",
+          "color": 5434855,
+          "author": {
+            "name": `${message.member.user.username}`,
+            "icon_url": ("https://cdn.discordapp.com/avatars/"+`${message.member.user.id}`+"/"+`${message.member.user.avatar}`+".jpeg")
+          },
+          "fields": [
+            {
+              "name": "刪除內容",
+              "value": `${message.content}`
+            }
+          ]
+        };
+        if (embed.fields.length > 0) {
+          client.channels.cache.get("887169974211334174").send({ embed });  //榕樹
+          }
+  }catch(err){
+      console.log("messageDeleteError",err);
+  }
+});
+
+//抓刪 更新事件
+client.on('messageUpdate', function (oldMessage, newMessage) {
+  if (!oldMessage.guild || !newMessage.guild) return;
+  if(oldMessage.author.id === client.user.id) return;
+  if (oldMessage.content.includes("https://")) return;
+  if (oldMessage.author.bot) {
+    return; // 忽略由機器人發出的訊息
+  }
+  try {
+      const embed = {
+          "description": ('這個人在'+`<#${oldMessage.channel.id}>`+'編輯了他的訊息'),
+          "url": "https://discordapp.com/",
+          "color": 15342211,
+          "author": {
+            "name": `${oldMessage.member.user.username}`,
+            "url": `${oldMessage.url}`,
+            "icon_url": ("https://cdn.discordapp.com/avatars/"+`${oldMessage.member.user.id}`+"/"+`${oldMessage.member.user.avatar}`+".jpeg")
+          },
+          "fields": [
+            {
+              "name": "編輯前",
+              "value": oldMessage.content ? `${oldMessage.content}` : "編輯前訊息內容為空"
+            },
+            {
+              "name": "編輯後",
+              "value": newMessage.content ? `${newMessage.content}` : "編輯後訊息內容為空"
+            }
+          ]
+        };
+        client.channels.cache.get("887169974211334174").send({ embed })  //榕樹
+     
+  }
+  
+   catch (err) {
+      console.log('messageUpdateError', err);
+  }
+})

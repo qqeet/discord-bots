@@ -1,0 +1,20 @@
+﻿Logged in as 摰嗆撠孕#0309!
+node.exe : (node:17028) DeprecationWarning: The ready event has been renamed to clientReady to distinguish it from the gateway READY event and 
+will only emit under that name in v15. Please use clientReady instead.
+位於 線路:5 字元:9
++         & $nodePath $scriptFile 2>&1 | Out-File -FilePath $logPath -A ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:17028) De...tReady instead.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Logged in as 摰嗆撠孕#0309!
+node.exe : (node:49744) DeprecationWarning: The ready event has been renamed to clientReady to distinguish it from the gateway READY event and 
+will only emit under that name in v15. Please use clientReady instead.
+位於 線路:5 字元:9
++         & $nodePath $scriptFile 2>&1 | Out-File -FilePath $logPath -A ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:49744) De...tReady instead.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-deprecation ...` to show where the warning was created)

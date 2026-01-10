@@ -1,0 +1,247 @@
+const { Client } = require('discord.js');
+const ytdl = require('ytdl-core');
+const { token } = require('./token.json');
+const { prefix } = require('./config.json');
+const client = new Client();
+client.login(token);
+
+var oof = ['https://www.youtube.com/watch?v=f49ELvryhao', 'https://www.youtube.com/watch?v=nbONxjyiVj4'];
+var nani = ['https://www.youtube.com/watch?v=gjldfDIzozI', 'https://www.youtube.com/watch?v=oWZuRWicyFE'];
+var randshit = ['https://www.youtube.com/watch?v=dYUwZKkvVO0', 'https://www.youtube.com/watch?v=JxbNJkUsXkw', 'https://www.youtube.com/watch?v=3Bzo_kXL2Y0','https://www.youtube.com/watch?v=59QTKsDMxnk'];
+var koronemonke = ['https://www.youtube.com/watch?v=FVjHQi986m8', 'https://www.youtube.com/watch?v=iCg_t39xuGo'];
+var za_warudo = ['https://www.youtube.com/watch?v=xZqOANCrO8o', 'https://www.youtube.com/watch?v=7ePWNmLP0Z0'];
+// 建立一個類別來管理 Property 及 Method
+class Music {
+
+    constructor() {
+        this.isPlaying = false;  // { guild1ID: false, guild2ID: true, ... }
+        this.queue = {};
+        this.connection = {};
+        this.dispatcher = {};
+    }
+
+    async join(msg) {
+
+        // Bot 加入語音頻道
+        this.connection[msg.guild.id] = await msg.member.voice.channel.join();
+		music.play(msg);
+    }
+
+    async play(msg) {
+        
+        // 語音群的 ID
+        const guildID = msg.guild.id;
+
+        // 如果 Bot 還沒加入該語音群的語音頻道
+        if (!this.connection[guildID]) {
+            
+            return;
+        }
+
+        // 網址新增處!!!!!!!!!!!!!!!!!!!!!!!
+		
+		if (msg.content === '滑倒') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=072tU1tamd0';
+        }
+        if (msg.content === 'bruh') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=2ZIpFytCSVc';
+		}
+		if (msg.content === 'korone a'||msg.content === 'a') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=-LGAhWL5UqY';
+        }
+		if (msg.content === '欸幹!') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=cPa0db6A9uc';
+        }
+		if (msg.content === '轟隆隆隆') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=IcsI8z0xfS8';
+        }
+		if (msg.content === 'sneeze') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=n5fLQdevkGI';
+        }
+		if (msg.content === 'oh my') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=vjqCi9H7sEc';
+        }
+		if (msg.content === 'faker!') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=bVCr8KzA9pQ';
+        }
+		if (msg.content === 'nani') {
+        // 則 Bot 回應 'Pong'
+		var a=0;
+		a=Math.floor(Math.random()*2);
+	    var musicURL = nani[a];
+        }
+	    if (msg.content === 'nigga') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=vU4FeGUoT6s';
+        }
+		if (msg.content === 'FAQ') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=8aT41uH4YzY';
+        }
+		if (msg.content === 'za warudo'||msg.content === 'ZA WARUDO') {
+        // 則 Bot 回應 'Pong'
+	    var a=0;
+		a=Math.floor(Math.random()*2);
+	    var musicURL = za_warudo[a];
+        }
+	    if (msg.content === 'hehe') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=lgHeMm1OGcY';
+        }
+		if (msg.content === 'Star Wars'||msg.content === 'star wars') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=CuhaLsVhrVs';
+        }
+		if (msg.content === 'www') {
+        // 則 Bot 回應 'Pong'
+	    var a=0;
+		a=Math.floor(Math.random()*2);
+	    var musicURL = koronemonke[a];
+        }
+		if (msg.content === 'oof') {
+        // 則 Bot 回應 'Pong'
+		var a=0;
+		a=Math.floor(Math.random()*2);
+	    var musicURL = oof[a];
+        }
+		if (msg.content === '抽') {
+        // 則 Bot 回應 'Pong'
+		var a=0;
+		a=Math.floor(Math.random()*4);
+	    var musicURL = randshit[a];
+        }
+		if (msg.content === 'Hi Honey') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=E1CauaFkZYY';
+        }
+		if (msg.content === '縄文ドキドキ') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=77EuHKKa3T4';
+        }
+		if (msg.content === 'wah'||msg.content === 'Wah'||msg.content === 'WAH') {
+        // 則 Bot 回應 'Pong'
+	    var musicURL = 'https://www.youtube.com/watch?v=OUQ5ZcRhN1s';
+        }
+        try {
+
+            // 取得 YouTube 影片資訊
+            const res = await ytdl.getInfo(musicURL);
+            const info = res.videoDetails;
+
+            // 將歌曲資訊加入隊列
+            if (!this.queue[guildID]) {
+                this.queue[guildID] = [];
+            }
+
+            this.queue[guildID].push({
+                name: info.title,
+                url: musicURL
+            });
+
+            // 如果目前正在播放歌曲就加入隊列，反之則播放歌曲
+            if (this.isPlaying) {
+               
+            } else {
+                this.isPlaying = true;
+                this.playMusic(msg, guildID, this.queue[guildID][0]);
+            }
+
+        } catch(e) {
+            console.log(e);
+        }
+
+    }
+
+    playMusic(msg, guildID, musicInfo) {
+
+        
+
+        // 播放音樂
+        this.dispatcher[guildID] = this.connection[guildID].play(ytdl(musicInfo.url, { filter: 'audioonly' }));
+
+        // 把音量降 50%，不然第一次容易被機器人的音量嚇到 QQ
+        this.dispatcher[guildID].setVolume(0.3);
+
+        // 移除 queue 中目前播放的歌曲
+        this.queue[guildID].shift();
+
+        // 歌曲播放結束時的事件
+        const self = this;
+        this.dispatcher[guildID].on('finish', () => {
+
+            // 如果隊列中有歌曲
+            if (self.queue[guildID].length > 0) {
+                self.playMusic(msg, guildID, self.queue[guildID].shift());
+            } else {
+                self.isPlaying = false;
+                music.leave(msg);
+            }
+
+        });
+
+    }
+
+    
+
+    leave(msg) {
+
+        // 離開頻道
+        this.connection[msg.guild.id].disconnect();
+
+    }
+}
+
+const music = new Music();
+
+// 當 Bot 接收到訊息時的事件
+client.on('message',async (msg)=> {
+
+    var words = [ "中之人", "衝塔"]
+
+    for (var i=0; i < words.length; i++) {
+
+    if (msg.content.includes(words[i])) {
+
+    // YOUR CODE
+    msg.channel.send('https://cdn.discordapp.com/emojis/762942085174657045.webp?size=160&quality=lossless')
+    }
+
+}
+
+
+    // 如果訊息的內容是 'ping'
+    if (msg.content === '滑倒') {
+        // 則 Bot 回應 'Pong'
+		music.join(msg);	
+	    msg.channel.send('https://tenor.com/view/asiagodtone-hotpot-%E4%BA%9E%E6%B4%B2%E7%B5%B1%E7%A5%9E-%E7%B5%B1%E7%A5%9E-%E7%81%AB%E9%8D%8B-gif-20621408');
+    }
+
+	if (msg.content === 'oof'||msg.content === 'www'||msg.content === 'Star Wars'||msg.content === 'star wars'||msg.content === 'hehe'||msg.content === 'FAQ'
+	   ||msg.content === 'nigga'||msg.content === 'nani'||msg.content === 'faker!'||msg.content === 'oh my'||msg.content === 'sneeze'
+	   ||msg.content === '轟隆隆隆'||msg.content === '欸幹!'||msg.content === 'korone a'||msg.content === 'bruh'||msg.content === '抽'||msg.content === 'a'
+	   ||msg.content === 'za warudo'||msg.content === 'ZA WARUDO'||msg.content === 'Hi Honey'||msg.content === '縄文ドキドキ'||msg.content === 'WAH'||msg.content === 'wah'
+	   ||msg.content === 'Wah'
+	   ) {
+        // 則 Bot 回應 'Pong'
+        music.join(msg);
+	}
+	
+});
+
+
+// 連上線時的事件
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+    client.user.setActivity("Minecraft");
+});
+
+
+
