@@ -23,20 +23,9 @@ client.on('clientReady', () => {
 
 
 //抓刪 刪除事件
-client.on('messageDelete', async function (message) {
+client.on('messageDelete', function (message) {
   try {
     if (!message.guild) return; //只要是來自群組的訊息
-    
-    // 嘗試 fetch partial message
-    if (message.partial) {
-      try {
-        message = await message.fetch();
-      } catch (err) {
-        console.log(`無法 fetch 已刪除訊息 [頻道: ${message.channelId}]`, err.message);
-        // 即使 fetch 失敗，仍嘗試用現有資訊記錄
-      }
-    }
-    
     if (!message.author) return; // 檢查 author 是否存在
     if (message.author.bot) return; // 忽略由機器人發出的訊息
     
