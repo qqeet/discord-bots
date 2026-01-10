@@ -6,3 +6,14 @@ node_modules/
 .env
 .DS_Store
 chatbot.rb
+logs/
+*.backup.txt
+discord語音bot backup.txt
+msg監控備份.txt
+musicbot備份.txt
+discord.js/
+discord.js-master/
+Gemfile
+Procfile
+music.js
+*.backup
