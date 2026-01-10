@@ -94,47 +94,30 @@ client.on('messageDelete', function (message) {
 });
 
 //抓刪 更新事件
-client.on('messageUpdate', async function (oldMessage, newMessage) {
+client.on('messageUpdate', function (oldMessage, newMessage) {
+  if (!oldMessage.guild || !newMessage.guild) return;
+  if(oldMessage.author.id === client.user.id) return;
+  if (oldMessage.content.includes("https://")) return;
+  if (oldMessage.author.bot) {
+    return; // 忽略由機器人發出的訊息
+  }
   try {
-    // oldMessage 或 newMessage 可能是 null 或 partial，先做保護
-    if (!oldMessage || !newMessage) return;
+      const authorName = (oldMessage.member && oldMessage.member.user && oldMessage.member.user.username) ? oldMessage.member.user.username : (oldMessage.author ? oldMessage.author.username : 'Unknown');
+      const authorIcon = (oldMessage.member && oldMessage.member.user && oldMessage.member.user.avatar) ? `https://cdn.discordapp.com/avatars/${oldMessage.member.user.id}/${oldMessage.member.user.avatar}.jpeg` : null;
+      const embed = new EmbedBuilder()
+        .setDescription('這個人在' + `<#${oldMessage.channel.id}>` + '編輯了他的訊息')
+        .setURL('https://discordapp.com/')
+        .setColor(15342211)
+        .setAuthor({ name: authorName, iconURL: authorIcon })
+        .addFields(
+          { name: '編輯前', value: oldMessage.content ? `${oldMessage.content}` : '編輯前訊息內容為空' },
+          { name: '編輯後', value: newMessage.content ? `${newMessage.content}` : '編輯後訊息內容為空' }
+        );
 
-    // 嘗試 fetch partials（若為 partial）
-    if (oldMessage.partial) {
-      oldMessage = await oldMessage.fetch().catch(() => null);
-      if (!oldMessage) return;
-    }
-    if (newMessage.partial) {
-      newMessage = await newMessage.fetch().catch(() => null);
-      if (!newMessage) return;
-    }
-
-    if (!oldMessage.guild || !newMessage.guild) return;
-    if (oldMessage.author && oldMessage.author.id === client.user.id) return;
-    if (oldMessage.author && oldMessage.author.bot) return;
-    if (oldMessage.content && oldMessage.content.includes("https://")) return;
-
-    const authorName = (oldMessage.member && oldMessage.member.user && oldMessage.member.user.username) ? oldMessage.member.user.username : (oldMessage.author ? oldMessage.author.username : 'Unknown');
-    const authorIcon = (oldMessage.member && oldMessage.member.user && oldMessage.member.user.avatar) ? `https://cdn.discordapp.com/avatars/${oldMessage.member.user.id}/${oldMessage.member.user.avatar}.jpeg` : null;
-    const embed = new EmbedBuilder()
-      .setDescription('這個人在' + `<#${oldMessage.channel.id}>` + '編輯了他的訊息')
-      .setURL('https://discordapp.com/')
-      .setColor(15342211)
-      .setAuthor({ name: authorName, iconURL: authorIcon })
-      .addFields(
-        { name: '編輯前', value: oldMessage.content ? `${oldMessage.content}` : '編輯前訊息內容為空' },
-        { name: '編輯後', value: newMessage.content ? `${newMessage.content}` : '編輯後訊息內容為空' }
-      );
-
-    try {
       const logChannel = client.channels.cache.get('887169974211334174');
       if (logChannel) {
         logChannel.send({ embeds: [embed] });
       }
-    } catch (err) {
-      console.error('發送訊息失敗:', err);
-    }
-
   } catch (err) {
     console.log('messageUpdateError', err);
   }
