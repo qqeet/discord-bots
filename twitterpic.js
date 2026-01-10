@@ -24,7 +24,7 @@ client.on('clientReady', () => {
       try {
         message = await message.fetch();
       } catch (err) {
-        console.log('無法 fetch deleted message:', err.message);
+        console.log(`無法 fetch 已刪除訊息 [頻道: ${message.channelId}]`, err.message);
       }
     }
     
