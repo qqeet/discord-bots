@@ -49,18 +49,18 @@ client.on('messageDelete', function (message) {
 
     // 只發送一次日誌
     if (hasImage) {
+      const messageLink = `https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`;
       const embed = new EmbedBuilder()
-        .setDescription('這個人在' + `<#${message.channel.id}>` + '有訊息被刪除')
-        .setURL('https://discordapp.com/')
+        .setDescription(`這個人在 <#${message.channel.id}> 有訊息被刪除\n[點擊查看訊息](${messageLink})`)
         .setColor(5434855)
         .setAuthor({ name: authorName, iconURL: authorIcon })
         .addFields({ name: '刪除內容', value: '以下圖片' });
       logChannel.send({ embeds: [embed] });
       logChannel.send(`${message.attachments.first().url}`);
     } else if (message.content && message.content !== "") {
+      const messageLink = `https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`;
       const embed = new EmbedBuilder()
-        .setDescription('這個人在' + `<#${message.channel.id}>` + '有訊息被刪除')
-        .setURL('https://discordapp.com/')
+        .setDescription(`這個人在 <#${message.channel.id}> 有訊息被刪除\n[點擊查看訊息](${messageLink})`)
         .setColor(5434855)
         .setAuthor({ name: authorName, iconURL: authorIcon })
         .addFields({ name: '刪除內容', value: message.content });
@@ -85,9 +85,9 @@ client.on('messageUpdate', function (oldMessage, newMessage) {
   try {
       const authorName = (oldMessage.member && oldMessage.member.user && oldMessage.member.user.username) ? oldMessage.member.user.username : (oldMessage.author ? oldMessage.author.username : 'Unknown');
       const authorIcon = (oldMessage.member && oldMessage.member.user && oldMessage.member.user.avatar) ? `https://cdn.discordapp.com/avatars/${oldMessage.member.user.id}/${oldMessage.member.user.avatar}.jpeg` : null;
+      const messageLink = `https://discord.com/channels/${oldMessage.guild.id}/${oldMessage.channel.id}/${oldMessage.id}`;
       const embed = new EmbedBuilder()
-        .setDescription('這個人在' + `<#${oldMessage.channel.id}>` + '編輯了他的訊息')
-        .setURL('https://discordapp.com/')
+        .setDescription(`這個人在 <#${oldMessage.channel.id}> 編輯了他的訊息\n[點擊查看訊息](${messageLink})`)
         .setColor(15342211)
         .setAuthor({ name: authorName, iconURL: authorIcon })
         .addFields(

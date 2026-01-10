@@ -39,9 +39,9 @@ client.on('messageDelete', function (message) {
       if (react === true) { //React to the message
           const authorName = (message.member && message.member.user && message.member.user.username) ? message.member.user.username : message.author.username;
           const authorIcon = (message.member && message.member.user && message.member.user.avatar) ? `https://cdn.discordapp.com/avatars/${message.member.user.id}/${message.member.user.avatar}.jpeg` : null;
+          const messageLink = `https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`;
           const embed = new EmbedBuilder()
-            .setDescription('這個人在' + `<#${message.channel.id}>` + '有訊息被刪除')
-            .setURL('https://discordapp.com/')
+            .setDescription(`這個人在 <#${message.channel.id}> 有訊息被刪除\n[點擊查看訊息](${messageLink})`)
             .setColor(5434855)
             .setAuthor({ name: authorName, iconURL: authorIcon })
             .addFields({ name: '刪除內容', value: '以下圖片' });
@@ -64,9 +64,9 @@ client.on('messageDelete', function (message) {
       if (message.content===("")) return;
       const authorName = (message.member && message.member.user && message.member.user.username) ? message.member.user.username : message.author.username;
       const authorIcon = (message.member && message.member.user && message.member.user.avatar) ? `https://cdn.discordapp.com/avatars/${message.member.user.id}/${message.member.user.avatar}.jpeg` : null;
+      const messageLink = `https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`;
       const embed = new EmbedBuilder()
-        .setDescription('這個人在' + `<#${message.channel.id}>` + '有訊息被刪除')
-        .setURL('https://discordapp.com/')
+        .setDescription(`這個人在 <#${message.channel.id}> 有訊息被刪除\n[點擊查看訊息](${messageLink})`)
         .setColor(5434855)
         .setAuthor({ name: authorName, iconURL: authorIcon })
         .addFields({ name: '刪除內容', value: `${message.content}` });
@@ -104,9 +104,9 @@ client.on('messageUpdate', async function (oldMessage, newMessage) {
 
     const authorName = (oldMessage.member && oldMessage.member.user && oldMessage.member.user.username) ? oldMessage.member.user.username : (oldMessage.author ? oldMessage.author.username : 'Unknown');
     const authorIcon = (oldMessage.member && oldMessage.member.user && oldMessage.member.user.avatar) ? `https://cdn.discordapp.com/avatars/${oldMessage.member.user.id}/${oldMessage.member.user.avatar}.jpeg` : null;
+    const messageLink = `https://discord.com/channels/${oldMessage.guild.id}/${oldMessage.channel.id}/${oldMessage.id}`;
     const embed = new EmbedBuilder()
-      .setDescription('這個人在' + `<#${oldMessage.channel.id}>` + '編輯了他的訊息')
-      .setURL('https://discordapp.com/')
+      .setDescription(`這個人在 <#${oldMessage.channel.id}> 編輯了他的訊息\n[點擊查看訊息](${messageLink})`)
       .setColor(15342211)
       .setAuthor({ name: authorName, iconURL: authorIcon })
       .addFields(
