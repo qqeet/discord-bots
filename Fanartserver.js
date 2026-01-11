@@ -49,18 +49,16 @@ client.on('messageDelete', function (message) {
 
     // 只發送一次日誌
     if (hasImage) {
-      const messageLink = `https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`;
       const embed = new EmbedBuilder()
-        .setDescription(`這個人在 <#${message.channel.id}> 有訊息被刪除\n[點擊查看訊息](${messageLink})`)
+        .setDescription(`這個人在 <#${message.channel.id}> 有訊息被刪除`)
         .setColor(5434855)
         .setAuthor({ name: authorName, iconURL: authorIcon })
         .addFields({ name: '刪除內容', value: '以下圖片' });
       logChannel.send({ embeds: [embed] });
       logChannel.send(`${message.attachments.first().url}`);
     } else if (message.content && message.content !== "") {
-      const messageLink = `https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id}`;
       const embed = new EmbedBuilder()
-        .setDescription(`這個人在 <#${message.channel.id}> 有訊息被刪除\n[點擊查看訊息](${messageLink})`)
+        .setDescription(`這個人在 <#${message.channel.id}> 有訊息被刪除`)
         .setColor(5434855)
         .setAuthor({ name: authorName, iconURL: authorIcon })
         .addFields({ name: '刪除內容', value: message.content });
