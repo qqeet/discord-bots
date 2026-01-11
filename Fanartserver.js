@@ -72,7 +72,8 @@ client.on('messageDelete', function (message) {
 //抓刪 更新事件
 client.on('messageUpdate', function (oldMessage, newMessage) {
   if (!oldMessage.guild || !newMessage.guild) return;
-  if(oldMessage.author.id === client.user.id) return;
+  if (!oldMessage.author) return; // 檢查 author 是否存在
+  if (oldMessage.author.id === client.user.id) return;
   if (oldMessage.author.bot) {
     return; // 忽略由機器人發出的訊息
   }
