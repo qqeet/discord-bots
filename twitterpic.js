@@ -12,6 +12,11 @@ client.login(token);
 client.on('clientReady', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     client.user.setActivity("Blue Archive");
+    
+    // 每 10 分鐘更新一次狀態，保持網絡活動
+    setInterval(() => {
+        client.user.setActivity("Blue Archive");
+    }, 10 * 60 * 1000);
 });
 
   //抓刪 刪除事件

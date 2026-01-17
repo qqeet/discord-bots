@@ -15,6 +15,11 @@ client.login(token);
 client.on('clientReady', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     client.user.setActivity("Phantasy Star Online 2: New Genesis");
+    
+    // 每 10 分鐘更新一次狀態，保持網絡活動
+    setInterval(() => {
+        client.user.setActivity("Phantasy Star Online 2: New Genesis");
+    }, 10 * 60 * 1000);
 });
 
 

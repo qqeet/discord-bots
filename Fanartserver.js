@@ -18,6 +18,11 @@ client.login(token);
 client.on('clientReady', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     client.user.setActivity("Minecraft");
+    
+    // 每 10 分鐘更新一次狀態，保持網絡活動
+    setInterval(() => {
+        client.user.setActivity("Minecraft");
+    }, 10 * 60 * 1000);
 });
 
 
